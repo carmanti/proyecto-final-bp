@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace Curso.ComercioElectronico.Application;
+
+
+public interface IMarcaAppService
+{
+
+    ICollection<MarcaDto> GetAll();
+
+    Task<MarcaDto> CreateAsync(MarcaCrearActualizarDto marca);
+
+    Task UpdateAsync(int id, MarcaCrearActualizarDto marca);
+
+    Task<bool> DeleteAsync(int marcaId);
+}
+
