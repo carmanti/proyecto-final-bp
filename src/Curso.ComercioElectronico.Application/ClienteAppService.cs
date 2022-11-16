@@ -13,7 +13,6 @@ public class ClienteAppService : IClienteAppService
 
     public async Task<ClienteDto> CreateAsync(ClienteCrearActualizarDto clienteDto)
     {
-        //TODO: Aplicar validaciones
         var existeNombreCliente = await repository.ExisteNombreCliente(clienteDto.Nombres);
         if (existeNombreCliente)
         {
@@ -31,6 +30,9 @@ public class ClienteAppService : IClienteAppService
         cliente.Cedula = clienteDto.Cedula;
         cliente.Direccion = clienteDto.Direccion;
         cliente.Telefono = clienteDto.Telefono;
+        cliente.Edad = clienteDto.Edad;
+        cliente.MayorEdad = clienteDto.MayorEdad;
+        cliente.Observaciones = clienteDto.Observaciones;
 
         //Persistencia objeto
         cliente = await repository.AddAsync(cliente);
@@ -41,9 +43,11 @@ public class ClienteAppService : IClienteAppService
         clienteCreado.Id = cliente.Id;
         clienteCreado.Nombres = cliente.Nombres;
         clienteCreado.Cedula = cliente.Cedula;
-        clienteCreado.Direccion = clienteDto.Direccion;
-        clienteCreado.Telefono = clienteDto.Telefono;
-
+        clienteCreado.Direccion = cliente.Direccion;
+        clienteCreado.Telefono = cliente.Telefono;
+        clienteCreado.Edad = cliente.Edad;
+        clienteCreado.MayorEdad = cliente.MayorEdad;
+        clienteCreado.Observaciones = cliente.Observaciones;
 
         return clienteCreado;
     }
@@ -90,13 +94,17 @@ public class ClienteAppService : IClienteAppService
             throw new ArgumentException($"El cliente con el id: {id}, no existe");
         }
 
-
-        //Mapeo Dto => Entidad
+        // var cliente = new Cliente();
+        cliente.Id = Guid.NewGuid();
         cliente.Nombres = clienteDto.Nombres;
+        cliente.Cedula = clienteDto.Cedula;
+        cliente.Direccion = clienteDto.Direccion;
+        cliente.Telefono = clienteDto.Telefono;
+        cliente.Edad = clienteDto.Edad;
+        cliente.MayorEdad = clienteDto.MayorEdad;
+        cliente.Observaciones = clienteDto.Observaciones;
 
-        //Persistencia objeto
         await repository.UpdateAsync(cliente);
-        // await repository.UnitOfWork.SaveChangesAsync();
 
         return;
     }
